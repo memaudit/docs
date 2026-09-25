@@ -4,25 +4,41 @@
 /*
  * Matches memaudit.dev's own color scheme (see its :root custom
  * properties: --bg, --panel, --border, --text, --muted, --hot).
- * memaudit.dev is dark-only, so light mode keeps Starlight's own
- * surface colors and just picks up the same accent hue for consistency
- * when a visitor's OS prefers light.
+ * memaudit.dev is dark-only, so light mode below is Starlight's own
+ * default light palette (copied explicitly, see note below), with only
+ * the accent hue changed to match, for consistency when a visitor's OS
+ * prefers light.
  *
  * Only the primitive --sl-color-* variables are set here (never the
  * derived ones like --sl-color-bg or --sl-color-text): Starlight
  * defines those once as `var(--sl-color-black)` etc, so they resolve
- * correctly under both themes only if the primitives they reference are
- * the ones overridden per theme, not the derived variables themselves.
+ * correctly only if the primitives they reference are the ones
+ * overridden, not the derived variables themselves.
  *
- * This must be wrapped in Starlight's own `starlight.base` layer:
- * customCss is injected unlayered by default, and unlayered CSS always
- * wins over layered CSS regardless of selector specificity - an
- * unscoped `:root` here would otherwise beat Starlight's own, more
- * specific `:root[data-theme='light']` rule (itself inside this layer),
- * breaking the light/dark switch for every property this file touches.
+ * This declares its own layer, ordered explicitly after Starlight's
+ * `starlight.base` layer, and sets BOTH themes' values for every
+ * primitive it touches - three earlier attempts got this wrong:
+ *  1. Unlayered CSS always wins over layered CSS regardless of
+ *     specificity, which broke the light/dark switch entirely.
+ *  2. Reusing the exact `starlight.base` layer name fixed that, but
+ *     left dark-vs-light ties among same-specificity `:root` blocks
+ *     decided by physical source order in the final bundle, which
+ *     happened to put Starlight's own default accent block after this
+ *     file's, silently reverting the accent color to Starlight's blue.
+ *  3. An explicit higher-priority layer fixed the accent color, but a
+ *     higher layer beats a lower one regardless of selector specificity
+ *     - so this file's dark-mode :root values kept beating Starlight's
+ *     OWN light-mode :root[data-theme='light'] values (which live in
+ *     the now-lower-priority starlight.base layer) for every primitive
+ *     touched here, since this file never said what light mode should
+ *     be for them. Once a variable is set in a higher layer, that
+ *     layer must handle every theme for it - there's no falling back
+ *     to a lower layer's conditional logic for just one theme.
  */
 
-@layer starlight.base {
+@layer starlight.base, memaudit-overrides;
+
+@layer memaudit-overrides {
 	:root {
 		--sl-color-black: #0a0d10;
 		--sl-color-white: #e7ecef;
@@ -35,10 +51,24 @@
 
 		--sl-color-accent-low: #7a3b2c;
 		--sl-color-accent: #ff6b4a;
-		--sl-color-accent-high: color-mix(in srgb, #ff6b4a 35%, white);
+		--sl-color-accent-high: color-mix(in srgb, #ff6b4a 80%, white);
 	}
 
+	/*
+	 * Starlight's own default light-mode primitives (from its
+	 * props.css), copied explicitly since this layer now shadows them
+	 * entirely - only the accent trio actually changes here.
+	 */
 	:root[data-theme='light'] {
+		--sl-color-black: hsl(0, 0%, 100%);
+		--sl-color-white: hsl(224, 10%, 10%);
+		--sl-color-gray-1: hsl(224, 14%, 16%);
+		--sl-color-gray-2: hsl(224, 10%, 23%);
+		--sl-color-gray-3: hsl(224, 7%, 36%);
+		--sl-color-gray-4: hsl(224, 6%, 56%);
+		--sl-color-gray-5: hsl(224, 6%, 77%);
+		--sl-color-gray-6: hsl(224, 20%, 94%);
+
 		--sl-color-accent-low: hsl(11, 90%, 88%);
 		--sl-color-accent: hsl(11, 90%, 56%);
 		--sl-color-accent-high: hsl(11, 80%, 28%);
