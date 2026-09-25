@@ -1,0 +1,12 @@
+{
+	"config": {
+		"MD013": false, // line length - prose doesn't need wrapping enforcement
+		"MD033": false // inline HTML - the SPDX header comment block needs this
+	},
+	"ignores": [
+		"node_modules/**",
+		// scaffold-generated Astro/Starlight agent notes, not authored docs content
+		"AGENTS.md",
+		"CLAUDE.md"
+	]
+}

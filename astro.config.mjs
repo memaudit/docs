@@ -3,6 +3,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator';
 
 export default defineConfig({
 	site: 'https://docs.memaudit.dev',
@@ -14,6 +15,7 @@ export default defineConfig({
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/memaudit/memaudit' },
 			],
+			plugins: [starlightLinksValidator()],
 			sidebar: [
 				{
 					label: 'Reference',
