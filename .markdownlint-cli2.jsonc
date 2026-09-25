@@ -1,7 +1,8 @@
 {
 	"config": {
 		"MD013": false, // line length - prose doesn't need wrapping enforcement
-		"MD033": false // inline HTML - the SPDX header comment block needs this
+		"MD033": false, // inline HTML - the SPDX header comment block needs this
+		"MD060": false // table column style - reference tables use plain, unpadded pipes; not worth reformatting for a cosmetic-only rule
 	},
 	"ignores": [
 		"node_modules/**",
