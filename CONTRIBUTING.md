@@ -16,13 +16,12 @@ unsigned commit.
 ## Commit signing
 
 GPG-sign your commits (`git commit -S`, or set `commit.gpgsign true` in
-your git config to do it by default). This isn't enforced by CI, but is
-expected for every commit landing in this repo, matching `memaudit`'s
-own maintainer practice.
+your git config to do it by default). `main` requires every commit to
+be signed before a PR can merge.
 
 ## Pull request titles
 
-This repo only allows squash merging, so a PR's title becomes its
+`main` only accepts squash merges, so a PR's title becomes its
 permanent entry in `main`'s history. PR titles must follow
 [Conventional Commits](https://www.conventionalcommits.org/), e.g.
 `docs: clarify the DAMON sysfs check` or `fix: correct a broken link in
