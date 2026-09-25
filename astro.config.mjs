@@ -20,6 +20,12 @@ export default defineConfig({
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/memaudit/memaudit' },
 			],
 			plugins: [starlightLinksValidator()],
+			components: {
+				// Shows "memaudit" in the visible nav header while the
+				// site title above ("memaudit documentation") still
+				// drives the browser tab title and other metadata.
+				SiteTitle: './src/components/SiteTitle.astro',
+			},
 			sidebar: [
 				{
 					label: 'Reference',
