@@ -1,6 +1,13 @@
 version = 1
 
 [[annotations]]
-path = ["LICENSE", "README.md", "CONTRIBUTING.md", "package.json", "package-lock.json", "tsconfig.json", ".gitignore", ".github/**", "public/**", "AGENTS.md", "src/assets/**", ".markdownlint-cli2.jsonc"]
+path = ["LICENSE", "README.md", "CONTRIBUTING.md", "package.json", "package-lock.json", "tsconfig.json", ".gitignore", ".github/**", "public/CNAME", ".markdownlint-cli2.jsonc"]
 SPDX-FileCopyrightText = "2026 the memaudit authors"
 SPDX-License-Identifier = "Apache-2.0"
+
+# Starlight's default favicon, kept as-is from the scaffold rather than
+# relabeled with memaudit's own copyright.
+[[annotations]]
+path = "public/favicon.svg"
+SPDX-FileCopyrightText = "2023 [Astro contributors](https://github.com/withastro/starlight/graphs/contributors)"
+SPDX-License-Identifier = "MIT"

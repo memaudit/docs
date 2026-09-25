@@ -10,20 +10,20 @@ SPDX-License-Identifier: Apache-2.0
 
 `memauditd run` reads its config from `/etc/memaudit/config.yaml` by
 default (override with `--config /path/to/file.yaml`). The file must
-exist — there's no "no config, use pure defaults" mode. Start from
+exist; there's no "no config, use pure defaults" mode. Start from
 [`deploy/config.example.yaml`](https://github.com/memaudit/memaudit/blob/main/deploy/config.example.yaml)
 in the main repo rather than writing one from scratch.
 
-Every field below is optional unless marked **required** — an absent
-field falls back to the default shown.
+Every field below is optional: an absent field falls back to the
+default shown.
 
 ## Top level
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `site` | string | *(none — required)* | A label identifying which customer/environment this host belongs to. Stamped onto every record this agent produces. |
-| `interval_s` | int | `15` | Base collection interval, in seconds. Some collectors tick slower than this on fixed multiples (medium = 2x, slow = 4x) — see [Architecture](/architecture/). |
-| `mode` | string | `sampling` | `sampling` or `zerotouch`. Changes which systemd unit you deploy, not anything in this file itself — see [Architecture](/architecture/) for what actually differs. |
+| `site` | string | *(none)* | A label identifying which customer/environment this host belongs to. Stamped onto every record this agent produces. Not validated at startup: if you omit it, `memauditd` still starts and every record carries an empty `site`, so treat this as effectively required in practice. |
+| `interval_s` | int | `15` | Base collection interval, in seconds. Some collectors tick slower than this on fixed multiples (medium = 2x, slow = 4x); see [Architecture](/architecture/). |
+| `mode` | string | `sampling` | `sampling` or `zerotouch`. Purely a label, logged at startup but not otherwise read by the code. Set it to match whichever systemd unit you actually deploy so the two stay consistent; see [Architecture](/architecture/) for what the unit choice itself changes. |
 
 ## `collectors`
 
@@ -32,7 +32,7 @@ field falls back to the default shown.
 | Field | Type | Default | Meaning |
 |---|---|---|---|
 | `enabled` | bool | `true` | Turn the cgroup v2 collector off entirely. |
-| `globs` | []string | `["system.slice/*.service", "kubepods.slice/**"]` | Which cgroups (relative to `/sys/fs/cgroup`) to collect — `*` matches one path segment, `**` matches zero or more. |
+| `globs` | []string | `["system.slice/*.service", "kubepods.slice/**"]` | Which cgroups (relative to `/sys/fs/cgroup`) to collect. `*` matches one path segment, `**` matches zero or more. |
 | `max` | int | `500` | Caps how many cgroups get collected per interval, most-shallow-first, if more match the globs than this. |
 
 ### `collectors.damon`
@@ -48,7 +48,7 @@ field falls back to the default shown.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `enabled` | string | `"auto"` | `"auto"`, `"true"`, or `"false"`. `"auto"` loads the NVIDIA library and silently disables the collector if that fails, instead of erroring — safe to leave on `"auto"` on a host with no GPU. |
+| `enabled` | string | `"auto"` | `"auto"` or `"true"` register the collector; they behave identically, and the name is historical. Any other value, including `"false"`, disables it. The collector runs `nvidia-smi` as a subprocess each tick. If the binary isn't found it logs a startup warning and reports nothing until it is, so it's safe to leave on `"auto"` on a host with no GPU. |
 
 ### `collectors.vllm`
 
@@ -71,8 +71,8 @@ gen_tokens: vllm:generation_tokens_total
 ```
 
 If a new vLLM version renames these metrics, run `memauditd vllm-dump
---endpoint <url>` first — it dumps every metric name the endpoint
-actually exposes, so you can update `metric_map` to match rather than
+--endpoint <url>` first. It dumps every metric name the endpoint
+actually exposes, so you can update `metric_map` to match instead of
 guessing.
 
 ## `k8s`
@@ -83,7 +83,7 @@ guessing.
 | `kubelet` | string | `https://127.0.0.1:10250` | The kubelet API URL to query for pod metadata. |
 | `token_path` | string | `""` (empty) | Path to a bearer token file for kubelet auth. |
 | `ca_path` | string | `""` (empty) | Path to a CA cert to verify the kubelet's TLS certificate. Ignored if `insecure_skip_verify` is set. |
-| `insecure_skip_verify` | bool | `false` | Skip kubelet TLS verification entirely. Only meant for local/dev clusters using self-signed certs without a distributable CA — never use this against a real cluster's kubelet. |
+| `insecure_skip_verify` | bool | `false` | Skip kubelet TLS verification entirely. Only meant for local/dev clusters using self-signed certs without a distributable CA. Never use this against a real cluster's kubelet. |
 | `label_keys` | []string | `["app"]` | Which pod label keys to copy onto enriched records. |
 
 ## `spool`
@@ -97,7 +97,7 @@ guessing.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `mode` | string | `push` | `push` (ship spooled segments to a remote `url` with retry/backoff) or `bundle` (never ship — air-gapped, spool stays local for manual collection). |
+| `mode` | string | `push` | `push` (ship spooled segments to a remote `url` with retry/backoff) or `bundle` (never ship: air-gapped, spool stays local for manual collection). |
 | `url` | string | `""` (empty) | The ingest endpoint URL. Required if `mode: push`. |
 | `token_file` | string | `""` (empty) | Path to a file containing the bearer token for shipping. |
 
@@ -113,4 +113,4 @@ Off by default, never active unless deliberately turned on.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `pprof_addr` | string | `""` (empty) | If set, exposes `net/http/pprof` for diagnosing a real leak or performance problem. Must be a loopback address (`127.0.0.1`, `::1`, or `localhost`) with a port — `memauditd` refuses to start rather than bind this to a non-loopback interface. |
+| `pprof_addr` | string | `""` (empty) | If set, exposes `net/http/pprof` for diagnosing a real leak or performance problem. Must be a loopback address (`127.0.0.1`, `::1`, or `localhost`) with a port; `memauditd` refuses to start rather than bind this to a non-loopback interface. |

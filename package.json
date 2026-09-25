@@ -17,5 +17,8 @@
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.23.3"
   }
 }

@@ -5,9 +5,6 @@
 		"MD060": false // table column style - reference tables use plain, unpadded pipes; not worth reformatting for a cosmetic-only rule
 	},
 	"ignores": [
-		"node_modules/**",
-		// scaffold-generated Astro/Starlight agent notes, not authored docs content
-		"AGENTS.md",
-		"CLAUDE.md"
+		"node_modules/**"
 	]
 }

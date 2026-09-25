@@ -30,14 +30,15 @@ architecture.md`. CI checks this on every pull request.
 
 ## License headers
 
-New source files need an SPDX header — see existing files for the exact
+New source files need an SPDX header; see existing files for the exact
 format. Files that can't carry one get an entry in `REUSE.toml` instead.
-`reuse lint` checks compliance; it also runs in CI.
+`reuse lint` checks compliance, and it also runs in CI.
 
 ## Local checks
 
     npm install
     npm run build   # also validates internal links (starlight-links-validator)
     npx markdownlint-cli2 "**/*.{md,mdx}"
+    reuse lint
 
 All of these run in CI on every pull request.
