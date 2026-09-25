@@ -13,25 +13,34 @@
  * defines those once as `var(--sl-color-black)` etc, so they resolve
  * correctly under both themes only if the primitives they reference are
  * the ones overridden per theme, not the derived variables themselves.
+ *
+ * This must be wrapped in Starlight's own `starlight.base` layer:
+ * customCss is injected unlayered by default, and unlayered CSS always
+ * wins over layered CSS regardless of selector specificity - an
+ * unscoped `:root` here would otherwise beat Starlight's own, more
+ * specific `:root[data-theme='light']` rule (itself inside this layer),
+ * breaking the light/dark switch for every property this file touches.
  */
 
-:root {
-	--sl-color-black: #0a0d10;
-	--sl-color-white: #e7ecef;
-	--sl-color-gray-1: #e7ecef;
-	--sl-color-gray-2: #e7ecef;
-	--sl-color-gray-3: #8a97a3;
-	--sl-color-gray-4: #78838d;
-	--sl-color-gray-5: #232b32;
-	--sl-color-gray-6: #12171c;
+@layer starlight.base {
+	:root {
+		--sl-color-black: #0a0d10;
+		--sl-color-white: #e7ecef;
+		--sl-color-gray-1: #e7ecef;
+		--sl-color-gray-2: #e7ecef;
+		--sl-color-gray-3: #8a97a3;
+		--sl-color-gray-4: #78838d;
+		--sl-color-gray-5: #232b32;
+		--sl-color-gray-6: #12171c;
 
-	--sl-color-accent-low: #7a3b2c;
-	--sl-color-accent: #ff6b4a;
-	--sl-color-accent-high: color-mix(in srgb, #ff6b4a 35%, white);
-}
+		--sl-color-accent-low: #7a3b2c;
+		--sl-color-accent: #ff6b4a;
+		--sl-color-accent-high: color-mix(in srgb, #ff6b4a 35%, white);
+	}
 
-:root[data-theme='light'] {
-	--sl-color-accent-low: hsl(11, 90%, 88%);
-	--sl-color-accent: hsl(11, 90%, 56%);
-	--sl-color-accent-high: hsl(11, 80%, 28%);
+	:root[data-theme='light'] {
+		--sl-color-accent-low: hsl(11, 90%, 88%);
+		--sl-color-accent: hsl(11, 90%, 56%);
+		--sl-color-accent-high: hsl(11, 80%, 28%);
+	}
 }
