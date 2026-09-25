@@ -13,6 +13,13 @@ By signing off you certify the text in the [DCO](https://developercertificate.or
 The DCO GitHub App checks every pull request and blocks merging on an
 unsigned commit.
 
+## Commit signing
+
+GPG-sign your commits (`git commit -S`, or set `commit.gpgsign true` in
+your git config to do it by default). This isn't enforced by CI, but is
+expected for every commit landing in this repo, matching `memaudit`'s
+own maintainer practice.
+
 ## Pull request titles
 
 This repo only allows squash merging, so a PR's title becomes its
