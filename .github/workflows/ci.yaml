@@ -33,7 +33,17 @@ jobs:
       - run: npm run build
       - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
-          args: --no-progress ./dist
+          # --root-dir resolves the site's own root-relative links (e.g.
+          # /config-reference/) against the built output. The site's own
+          # docs.memaudit.dev URLs (from the sitemap and canonical tags)
+          # are excluded: checking a not-yet-deployed build against its
+          # own live domain is redundant with the internal-link checks
+          # above and depends on DNS/deploy timing this job doesn't control.
+          args: >-
+            --no-progress
+            --root-dir "$GITHUB_WORKSPACE/dist"
+            --exclude '^https://docs\.memaudit\.dev'
+            ./dist
           fail: true
 
   markdown-lint:
