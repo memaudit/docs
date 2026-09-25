@@ -10,6 +10,10 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'memaudit docs',
+			logo: {
+				src: './src/assets/logo.svg',
+				alt: 'memaudit',
+			},
 			description:
 				'Reference documentation for memauditd, the read-only host agent for measuring cold memory, stranded DRAM, and KV-cache waste on Linux.',
 			social: [
