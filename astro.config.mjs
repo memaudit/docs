@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 the memaudit authors
+// SPDX-License-Identifier: Apache-2.0
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';

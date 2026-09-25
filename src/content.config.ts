@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 the memaudit authors
+// SPDX-License-Identifier: Apache-2.0
 import { defineCollection } from 'astro:content';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
