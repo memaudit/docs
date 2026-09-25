@@ -1,0 +1,37 @@
+/* SPDX-FileCopyrightText: 2026 the memaudit authors */
+/* SPDX-License-Identifier: Apache-2.0 */
+
+/*
+ * Matches memaudit.dev's own color scheme (see its :root custom
+ * properties: --bg, --panel, --border, --text, --muted, --hot).
+ * memaudit.dev is dark-only, so light mode keeps Starlight's own
+ * surface colors and just picks up the same accent hue for consistency
+ * when a visitor's OS prefers light.
+ *
+ * Only the primitive --sl-color-* variables are set here (never the
+ * derived ones like --sl-color-bg or --sl-color-text): Starlight
+ * defines those once as `var(--sl-color-black)` etc, so they resolve
+ * correctly under both themes only if the primitives they reference are
+ * the ones overridden per theme, not the derived variables themselves.
+ */
+
+:root {
+	--sl-color-black: #0a0d10;
+	--sl-color-white: #e7ecef;
+	--sl-color-gray-1: #e7ecef;
+	--sl-color-gray-2: #e7ecef;
+	--sl-color-gray-3: #8a97a3;
+	--sl-color-gray-4: #78838d;
+	--sl-color-gray-5: #232b32;
+	--sl-color-gray-6: #12171c;
+
+	--sl-color-accent-low: #7a3b2c;
+	--sl-color-accent: #ff6b4a;
+	--sl-color-accent-high: color-mix(in srgb, #ff6b4a 35%, white);
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: hsl(11, 90%, 88%);
+	--sl-color-accent: hsl(11, 90%, 56%);
+	--sl-color-accent-high: hsl(11, 80%, 28%);
+}

@@ -19,6 +19,7 @@ export default defineConfig({
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/memaudit/memaudit' },
 			],
+			customCss: ['./src/styles/theme.css'],
 			plugins: [starlightLinksValidator()],
 			components: {
 				// Shows "memaudit" in the visible nav header while the
