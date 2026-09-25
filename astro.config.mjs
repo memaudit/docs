@@ -9,7 +9,7 @@ export default defineConfig({
 	site: 'https://docs.memaudit.dev',
 	integrations: [
 		starlight({
-			title: 'memaudit docs',
+			title: 'memaudit documentation',
 			logo: {
 				src: './src/assets/logo.svg',
 				alt: 'memaudit',
